@@ -1,0 +1,58 @@
+#include <DHT11.h>   // Library for DHT11 sensor
+
+// ------------------ DHT11 Setup ------------------
+
+// DHT11 data pin connected to digital pin 2
+DHT11 dht11(2);
+
+// Variables to store sensor readings
+int temperature = 0;
+int humidity = 0;
+
+void setup() {
+  // Start Serial communication
+  Serial.begin(9600);
+
+  Serial.println("DHT11 Temperature & Humidity Test Started");
+}
+
+void loop() {
+  // ------------------ Read DHT11 Sensor ------------------
+
+  // Read temperature and humidity
+  int result = dht11.readTemperatureHumidity(temperature, humidity);
+
+  // ------------------ Check Result ------------------
+
+  if (result == 0) {
+    // If reading is successful
+
+    Serial.print("Temperature: ");
+    Serial.print(temperature);
+    Serial.print(" °C");
+
+    Serial.print("\tHumidity: ");
+    Serial.print(humidity);
+    Serial.println(" %");
+
+    // ------------------ Simple Comparison Logic ------------------
+
+    if (temperature > humidity) {
+      Serial.println("Status: Temperature is higher than Humidity");
+    } 
+    else if (temperature < humidity) {
+      Serial.println("Status: Humidity is higher than Temperature");
+    } 
+    else {
+      Serial.println("Status: Temperature equals Humidity");
+    }
+
+  } else {
+    // If reading failed, print error message
+    Serial.print("DHT11 Error: ");
+    Serial.println(DHT11::getErrorString(result));
+  }
+
+  // DHT11 needs delay between readings
+  delay(2000);   // 2 seconds delay
+}
